@@ -14,8 +14,8 @@ from InterfazEstudiantes import InterfazEstudiantes
 # Traemos la clase InterfazCursos desde el archivo InterfazCursos.py
 from InterfazCursos import InterfazCursos
 
-# Traemos la clase InterfazMatriculas desde el archivo InterfazMatriculas.py
-from InterfazMatriculas import InterfazMatriculas
+# Traemos la clase InterfazMatriculas desde el archivo Interfazmatriculas.py
+from Interfazmatriculas import Interfazmatriculas
 
 
 # Creamos la ventana principal del programa
@@ -48,9 +48,8 @@ interfaz_cursos = InterfazCursos(pestanas)
 pestanas.add(interfaz_cursos, text="Cursos")
 
 # Matriculas necesita ver la lista de estudiantes y la lista de cursos
-# por eso se las pasamos (interfaz_estudiantes y
-# interfaz_cursos son las listas que ya tienen cargadas)
-interfaz_matriculas = InterfazMatriculas(
+
+interfaz_matriculas = Interfazmatriculas(
     pestanas,
     interfaz_estudiantes.estudiantes,
     interfaz_cursos.cursos
