@@ -413,29 +413,3 @@ class InterfazMatriculas(ttk.Frame):
         self.combo_estado.current(0)
 
 
-# ---------------------------------------------------------
-# EJECUTAR PROGRAMA (prueba sola, con datos de ejemplo)
-# ---------------------------------------------------------
-
-if __name__ == "__main__":
-
-    # Como esta interfaz necesita estudiantes y cursos para funcionar,
-    # aqui le damos un par de datos de prueba para poder verla sola.
-    estudiantes_prueba = [
-        {"cedula": "120160779", "nombre": "Ashley", "apellidos": "Cascante Ruiz"}
-    ]
-
-    cursos_prueba = [
-        {"referencia": "2407.FH.CSTI15009.1", "descripcion": "Hoja de Calculo G1"}
-    ]
-
-    ventana = tk.Tk()
-    ventana.title("Gestión de Matrículas")
-    ventana.geometry("1000x600")
-
-    InterfazMatriculas(ventana, estudiantes_prueba, cursos_prueba).pack(
-        fill="both",
-        expand=True
-    )
-
-    ventana.mainloop()
