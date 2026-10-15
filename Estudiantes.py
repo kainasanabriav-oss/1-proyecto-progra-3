@@ -48,5 +48,4 @@ if __name__ == "__main__":
         "70151500"
     )
 
-    # Mostramos sus datos en la consola
     estudiante1.mostrar_datos()
