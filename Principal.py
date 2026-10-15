@@ -1,42 +1,61 @@
 # Principal
-# Este es el archivo PRINCIPAL del programa 
 
 
-# Primero importamos tkinter la libreria que usamos para hacer ventanas
+# Importamos tkinter, que es la libreria que usamos para hacer ventanass
 import tkinter as tk
 
-from tkinter import ttk #windgets mas lindos (notebook: es el que hace las pestañas)
+# ttk trae widgets un poco mas bonitos que tkinter normal entre ellos el "Notebook"
 
-# Traemos la clase InterfazEstudiantes desde el archivo InterfazEstudiantes
+from tkinter import ttk
+
+# Traemos la clase InterfazEstudiantes desde el archivo InterfazEstudiantes.py
 from InterfazEstudiantes import InterfazEstudiantes
 
-# y aqui tambien la clase InterfazCursos desde el archivo InterfazCursos
+# Traemos la clase InterfazCursos desde el archivo InterfazCursos.py
 from InterfazCursos import InterfazCursos
 
-# ventana principal del programa
+# Traemos la clase InterfazMatriculas desde el archivo InterfazMatriculas.py
+from InterfazMatriculas import InterfazMatriculas
+
+
+# Creamos la ventana principal del programa
 ventana = tk.Tk()
 
-# Le ponemos un titulo este es el texto que sale arriba de la ventana :b
+# Le ponemos un titulo este es el texto que sale arriba de la ventana
 ventana.title("Sistema de Control Academico")
 
-# tamaño de la ventana ancho x alto
+# Le decimos el tamaño inicial de la ventana: ancho x alto
 ventana.geometry("1000x650")
 
-# Creamos el Notebook
+# Creamos el Notebook el Notebook osea el "contenedor" de pestañas
+
 pestanas = ttk.Notebook(ventana)
 
 # Hacemos que el Notebook ocupe toda la ventana disponible
-pestanas.pack(fill="both", expand=True)# fill="both" quiere decir que crezca en ancho y en alto y el expand=True quiere decir que use el espacio extra si la ventana crece
+# fill="both" quiere decir que crezca en ancho y en alto
+# expand=True quiere decir que use el espacio extra si la ventana crece
+pestanas.pack(fill="both", expand=True)
 
-# Creamos la interfaz de estudiantes va a vivir desntro del Notebook
+# Creamos la interfaz de estudiantes, esta interfaz va a vivir DENTRO del Notebook
+
 interfaz_estudiantes = InterfazEstudiantes(pestanas)
 
-# Agregamos esa interfaz como una pestaña nueva con el nombre  Estudiantes
+# Agregamos esa interfaz como una pestaña nueva, con el nombre "Estudiantes"
 pestanas.add(interfaz_estudiantes, text="Estudiantes")
 
-# Y lo mismo para la interfaz de cursos
+# Hacemos lo mismo para la interfaz de cursos
 interfaz_cursos = InterfazCursos(pestanas)
 pestanas.add(interfaz_cursos, text="Cursos")
+
+# Matriculas necesita ver la lista de estudiantes y la lista de cursos
+# por eso se las pasamos (interfaz_estudiantes y
+# interfaz_cursos son las listas que ya tienen cargadas)
+interfaz_matriculas = InterfazMatriculas(
+    pestanas,
+    interfaz_estudiantes.estudiantes,
+    interfaz_cursos.cursos
+)
+pestanas.add(interfaz_matriculas, text="Matriculas")
 
 
 ventana.mainloop()
