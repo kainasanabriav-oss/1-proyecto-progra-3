@@ -1,9 +1,9 @@
 # Interfaz de matriculas 
 
-# Interfaz Matriculas
 
-# Librería
-# pip install tkcalendar  (no es obligatoria aqui, pero usamos "date")
+
+
+# pip install tkcalendar  
 
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -12,12 +12,11 @@ from datetime import date
 
 class InterfazMatriculas(ttk.Frame):
 
-    # Estados que puede tener una matricula (segun el documento)
+    # Estados que puede tener una matricula)
     ESTADOS = ("Activa", "Retirado", "Finalizado", "Desertor")
 
-    # Esta interfaz necesita ver la lista de estudiantes y la lista de
-    # cursos para poder llenar los combobox. Por eso el constructor
-    # las recibe como parametros (vienen de Principal.py).
+    # Esta interfaz necesita ver la lista de estudiantes y la lista de cursos para poder llenar los combobox
+   
     def __init__(self, contenedor, lista_estudiantes, lista_cursos):
         super().__init__(contenedor, padding=15)
 
@@ -69,8 +68,8 @@ class InterfazMatriculas(ttk.Frame):
 
     def crear_formulario(self):
 
-        # Combobox de Estudiante. state="readonly" evita que el usuario
-        # escriba texto libre, solo puede elegir de la lista.
+        # Combobox de Estudiante state="readonly" evita que el usuario escriba texto libre osea solo puede elegir en la lista 
+        #
         ttk.Label(
             self,
             text="Estudiante"
@@ -85,7 +84,7 @@ class InterfazMatriculas(ttk.Frame):
         self.combo_estudiante.grid(row=1, column=1, sticky="w", padx=5)
 
         # Cada vez que el usuario le da clic al combo, refrescamos
-        # la lista de opciones (por si agregaron estudiantes nuevos).
+        # la lista de opciones (por si agregaron estudiantes nuevos)
         self.combo_estudiante.bind(
             "<Button-1>",
             self.actualizar_combo_estudiantes
@@ -127,7 +126,7 @@ class InterfazMatriculas(ttk.Frame):
         self.combo_estado.grid(row=3, column=1, sticky="w", padx=5)
 
     # Arma el texto "cedula - nombre apellidos" para cada estudiante
-    # y lo pone como opciones del combobox.
+    # y lo pone como opciones del combobox
     def actualizar_combo_estudiantes(self, evento=None):
         opciones = []
 
@@ -138,7 +137,7 @@ class InterfazMatriculas(ttk.Frame):
         self.combo_estudiante["values"] = opciones
 
     # Arma el texto "referencia - descripcion" para cada curso
-    # y lo pone como opciones del combobox.
+    # y lo pone como opciones del combobox
     def actualizar_combo_cursos(self, evento=None):
         opciones = []
 
@@ -289,7 +288,7 @@ class InterfazMatriculas(ttk.Frame):
         valores = self.tabla.item(fila, "values")
 
         # Guardamos el id para que "Actualizar Estado" y "Eliminar"
-        # sepan sobre cual matricula trabajar.
+        # sepan sobre cual matricula trabajar
         self.id_seleccionado = int(valores[0])
 
         # Ponemos en el combobox de Estado el estado actual de esa fila
@@ -313,7 +312,7 @@ class InterfazMatriculas(ttk.Frame):
             return
 
         # El texto del combo es "cedula - nombre apellidos", entonces
-        # partimos el texto por " - " y nos quedamos con la primera parte.
+        # partimos el texto por " - " y nos quedamos con la primera parte
         cedula = estudiante_texto.split(" - ")[0]
         referencia = curso_texto.split(" - ")[0]
 
