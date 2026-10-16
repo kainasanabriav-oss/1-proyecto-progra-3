@@ -13,7 +13,7 @@ from tkcalendar import DateEntry
 class InterfazEstudiantes(ttk.Frame):
 
     def __init__(self, contenedor):
-        super().__init__(contenedor, padding=15)
+        super().__init__(contenedor, padding=15)#
 
         # Lista donde se guardan los estudiantes temporalmente
         self.estudiantes = []
@@ -524,14 +524,14 @@ class InterfazEstudiantes(ttk.Frame):
             "celular_encargado": self.entrada_celular_encargado.get().strip()
         }
 
-        self.estudiantes.append(estudiante)
+        self.estudiantes.append(estudiante)#se agrega al estudiante a la lista
 
         messagebox.showinfo(
             "Éxito",
             "Estudiante guardado."
         )
 
-        self.cargar_estudiantes()
+        self.cargar_estudiantes()#actualiza la tabla para mostrar a el nuevo
         self.limpiar_formulario()
 
     # ------------------------------------------------------
