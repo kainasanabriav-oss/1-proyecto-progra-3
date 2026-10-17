@@ -1,22 +1,23 @@
-# Interfaz de matriculas 
+# Interfaz de matriculas
 
 
-
-
-# pip install tkcalendar  
 
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import date
 
+# Traemos la clase Matricula desde Matriculas.py.
+
+from Matriculas import Matricula
+
 
 class InterfazMatriculas(ttk.Frame):
 
-    # Estados que puede tener una matricula)
+    # Estados que puede tener una matricula
     ESTADOS = ("Activa", "Retirado", "Finalizado", "Desertor")
 
     # Esta interfaz necesita ver la lista de estudiantes y la lista de cursos para poder llenar los combobox
-   
+  
     def __init__(self, contenedor, lista_estudiantes, lista_cursos):
         super().__init__(contenedor, padding=15)
 
@@ -24,7 +25,7 @@ class InterfazMatriculas(ttk.Frame):
         self.lista_estudiantes = lista_estudiantes
         self.lista_cursos = lista_cursos
 
-        # Lista donde se guardan las matriculas hechas
+        # Lista donde se guardan los OBJETOS Matricula (ya no diccionarios)
         self.matriculas = []
 
         # Guarda el id de la matricula seleccionada en la tabla
@@ -68,8 +69,8 @@ class InterfazMatriculas(ttk.Frame):
 
     def crear_formulario(self):
 
-        # Combobox de Estudiante state="readonly" evita que el usuario escriba texto libre osea solo puede elegir en la lista 
-        #
+        # Combobox de Estudiante. state="readonly" evita que el usuario
+        # escriba texto libre, solo puede elegir de la lista
         ttk.Label(
             self,
             text="Estudiante"
@@ -136,8 +137,8 @@ class InterfazMatriculas(ttk.Frame):
 
         self.combo_estudiante["values"] = opciones
 
-    # Arma el texto "referencia - descripcion" para cada curso
-    # y lo pone como opciones del combobox
+    # Arma el texto "referencia - descripcion" para cada curso y lo pone como opciones del combobox
+    
     def actualizar_combo_cursos(self, evento=None):
         opciones = []
 
@@ -258,19 +259,21 @@ class InterfazMatriculas(ttk.Frame):
         for fila in self.tabla.get_children():
             self.tabla.delete(fila)
 
+        # Antes haciamos matricula["id"], matricula["cedula"], etc.
+        # Ahora que son objetos, se usa punto: matricula.id, matricula.cedul
         for matricula in self.matriculas:
             self.tabla.insert(
                 "",
                 "end",
                 values=(
-                    matricula["id"],
-                    matricula["cedula"],
-                    matricula["nombre"],
-                    matricula["apellidos"],
-                    matricula["referencia"],
-                    matricula["descripcion"],
-                    matricula["fecha"],
-                    matricula["estado"]
+                    matricula.id,
+                    matricula.cedula,
+                    matricula.nombre,
+                    matricula.apellidos,
+                    matricula.referencia,
+                    matricula.descripcion,
+                    matricula.fecha,
+                    matricula.estado
                 )
             )
 
@@ -285,13 +288,11 @@ class InterfazMatriculas(ttk.Frame):
         if not fila:
             return
 
+        #  lo que viene de la tabla siempre es texto,
+        # sin importar si adentro guardamos diccionarios u objetos
         valores = self.tabla.item(fila, "values")
 
-        # Guardamos el id para que "Actualizar Estado" y "Eliminar"
-        # sepan sobre cual matricula trabajar
         self.id_seleccionado = int(valores[0])
-
-        # Ponemos en el combobox de Estado el estado actual de esa fila
         self.combo_estado.set(valores[7])
 
     # ---------------------------------------------------------
@@ -311,14 +312,12 @@ class InterfazMatriculas(ttk.Frame):
             messagebox.showwarning("Validación", "Debes seleccionar un curso.")
             return
 
-        # El texto del combo es "cedula - nombre apellidos", entonces
-        # partimos el texto por " - " y nos quedamos con la primera parte
         cedula = estudiante_texto.split(" - ")[0]
         referencia = curso_texto.split(" - ")[0]
 
         # No se permiten matriculas duplicadas (mismo estudiante y curso)
         for matricula in self.matriculas:
-            if matricula["cedula"] == cedula and matricula["referencia"] == referencia:
+            if matricula.cedula == cedula and matricula.referencia == referencia:
                 messagebox.showwarning(
                     "Validación",
                     "Ese estudiante ya está matriculado en ese curso."
@@ -326,6 +325,7 @@ class InterfazMatriculas(ttk.Frame):
                 return
 
         # Buscamos los datos completos del estudiante con esa cedula
+        
         estudiante_encontrado = None
         for estudiante in self.lista_estudiantes:
             if estudiante["cedula"] == cedula:
@@ -339,18 +339,20 @@ class InterfazMatriculas(ttk.Frame):
 
         nuevo_id = len(self.matriculas) + 1
 
-        matricula = {
-            "id": nuevo_id,
-            "cedula": estudiante_encontrado["cedula"],
-            "nombre": estudiante_encontrado["nombre"],
-            "apellidos": estudiante_encontrado["apellidos"],
-            "referencia": curso_encontrado["referencia"],
-            "descripcion": curso_encontrado["descripcion"],
-            "fecha": date.today().isoformat(),
-            "estado": self.combo_estado.get()
-        }
+        # 
+        # creamos un OBJETO Matricula usando la clase que importamos arriba
+        matricula_nueva = Matricula(
+            nuevo_id,
+            estudiante_encontrado["cedula"],
+            estudiante_encontrado["nombre"],
+            estudiante_encontrado["apellidos"],
+            curso_encontrado["referencia"],
+            curso_encontrado["descripcion"],
+            date.today().isoformat(),
+            self.combo_estado.get()
+        )
 
-        self.matriculas.append(matricula)
+        self.matriculas.append(matricula_nueva)
 
         messagebox.showinfo("Éxito", "Matrícula registrada.")
 
@@ -367,9 +369,10 @@ class InterfazMatriculas(ttk.Frame):
             messagebox.showwarning("Actualizar", "Selecciona una matrícula de la tabla.")
             return
 
+        # Buscamos el objeto Matricula con ese id y le cambiamos el estado
         for matricula in self.matriculas:
-            if matricula["id"] == self.id_seleccionado:
-                matricula["estado"] = self.combo_estado.get()
+            if matricula.id == self.id_seleccionado:
+                matricula.estado = self.combo_estado.get()
 
         messagebox.showinfo("Éxito", "Estado actualizado.")
 
@@ -392,7 +395,7 @@ class InterfazMatriculas(ttk.Frame):
             return
 
         for matricula in self.matriculas:
-            if matricula["id"] == self.id_seleccionado:
+            if matricula.id == self.id_seleccionado:
                 self.matriculas.remove(matricula)
                 break
 
